@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   commit:
@@ -20,3 +21,8 @@ jobs:
           git add log.txt
           git commit -m "chore: daily log $(date -u +%F)"
           git push
+      # Re-enabling resets GitHub's 60-day inactivity timer for scheduled workflows.
+      - name: Keepalive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/daily.yml/enable"
