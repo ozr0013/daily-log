@@ -1,0 +1,22 @@
+name: daily
+on:
+  schedule:
+    - cron: "17 14 * * *"   # 08:17 MDT (cron is UTC)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Append and push
+        run: |
+          date -u >> log.txt
+          git config user.name "ozr0013"
+          git config user.email "128084219+ozr0013@users.noreply.github.com"
+          git add log.txt
+          git commit -m "chore: daily log $(date -u +%F)"
+          git push
